@@ -1,0 +1,1260 @@
+<!-- FIXES APPLIED:
+  1) Dark mode: hamburger icon now always visible (uses current text color + SVG icon)
+  2) Mobile menu now takes FULL WIDTH (not limited by .rail)
+  3) Mobile menu includes BOTH: Download CV + Dark/Light toggle (same as navbar)
+  4) Mobile menu opens as an overlay panel with full-width background, professional
+-->
+
+<!doctype html>
+<html lang="en" data-theme="light">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Abhishek Khatiwada — Flutter Developer</title>
+  <meta name="description"
+    content="Flutter Developer (3+ years). Real-time systems, maps, payments. Production apps on iOS & Android." />
+
+  <style>
+    :root {
+      --rail: 1160px;
+
+      /* LIGHT */
+      --bg: #ffffff;
+      --bg2: #f6f6fb;
+      --surface: rgba(255, 255, 255, .75);
+      --text: #0b1220;
+      --muted: rgba(11, 18, 32, .72);
+      --subtle: rgba(11, 18, 32, .56);
+      --border: rgba(11, 18, 32, .10);
+
+      --p: #9b6bff;
+      --p2: #9b6bff;
+      --btnClr: #f2f2f2;
+
+      --ring: rgba(109, 94, 252, .25);
+      --shadow: 0 18px 60px rgba(11, 18, 32, .12);
+      --shadow2: 0 10px 30px rgba(11, 18, 32, .10);
+
+      --r1: 16px;
+      --r2: 24px;
+
+      --font: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+    }
+
+    [data-theme="dark"] {
+      --bg: #06050e;
+      --bg2: #0a0820;
+      --surface: rgba(10, 8, 32, .62);
+      --text: #f1efff;
+      --muted: rgba(241, 239, 255, .74);
+      --subtle: rgba(241, 239, 255, .56);
+      --border: rgba(241, 239, 255, .12);
+
+      --p: #8b5cf6;
+      --p2: #c084fc;
+      --btnClr: #0a0820;
+
+      --ring: rgba(139, 92, 246, .30);
+      --shadow: 0 24px 80px rgba(0, 0, 0, .45);
+      --shadow2: 0 16px 50px rgba(0, 0, 0, .35);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: var(--font);
+      color: var(--text);
+      background:
+        radial-gradient(900px 520px at 20% -10%, color-mix(in srgb, var(--p) 20%, transparent), transparent 60%),
+        radial-gradient(800px 500px at 95% 0%, color-mix(in srgb, var(--p2) 14%, transparent), transparent 58%),
+        radial-gradient(900px 520px at 30% 115%, color-mix(in srgb, var(--p) 12%, transparent), transparent 56%),
+        linear-gradient(180deg, var(--bg), var(--bg2));
+      line-height: 1.6;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button {
+      font: inherit;
+      color: inherit;
+    }
+
+    .rail {
+      width: min(92vw, var(--rail));
+      margin-inline: auto;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      backdrop-filter: blur(12px);
+      background: color-mix(in srgb, var(--bg) 82%, transparent);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 14px 0;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 950;
+      letter-spacing: -.02em;
+      white-space: nowrap;
+    }
+
+    nav.links {
+      display: flex;
+      gap: 18px;
+      align-items: center;
+      font-weight: 800;
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    nav.links a {
+      padding: 8px 10px;
+      border-radius: 999px;
+    }
+
+    nav.links a:hover {
+      color: var(--text);
+      background: color-mix(in srgb, var(--surface) 70%, transparent);
+      border: 1px solid color-mix(in srgb, var(--border) 70%, transparent);
+    }
+
+    .actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 10px 14px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: color-mix(in srgb, var(--surface) 65%, transparent);
+      color: var(--text);
+      font-weight: 900;
+      font-size: 14px;
+      cursor: pointer;
+      transition: transform .15s ease, border-color .15s ease, background .15s ease;
+      white-space: nowrap;
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+      border-color: color-mix(in srgb, var(--p) 35%, var(--border));
+    }
+
+    .btn-primary {
+      border: none;
+      color: var(--btnClr);
+      background: linear-gradient(135deg, var(--p), var(--p2));
+      box-shadow: 0 14px 40px color-mix(in srgb, var(--p) 25%, transparent);
+    }
+
+    .btn-primary:hover {
+      filter: brightness(1.03);
+    }
+
+    .icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: color-mix(in srgb, var(--surface) 65%, transparent);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: transform .15s ease, border-color .15s ease;
+      color: var(--text);
+      /* <-- ensures visible in dark mode */
+    }
+
+    .icon:hover {
+      transform: translateY(-1px);
+      border-color: color-mix(in srgb, var(--p) 35%, var(--border));
+    }
+
+    /* SVG icon inherits currentColor */
+    .icon svg {
+      width: 22px;
+      height: 22px;
+      display: block;
+      stroke: currentColor;
+    }
+
+    .hamburger {
+      display: none;
+    }
+
+    @media (max-width: 900px) {
+      nav.links {
+        display: none;
+      }
+
+      .hamburger {
+        display: inline-flex;
+      }
+    }
+
+    /* ---------------------------
+      FULL-WIDTH MOBILE MENU OVERLAY
+    --------------------------- */
+    /* Mobile overlay full width */
+    .mobileOverlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 60;
+      background: rgba(0, 0, 0, .35);
+      backdrop-filter: blur(6px);
+    }
+
+    .mobilePanel {
+      width: 100%;
+      background: color-mix(in srgb, var(--bg) 92%, transparent);
+      border-bottom: 1px solid var(--border);
+      box-shadow: var(--shadow2);
+      padding: 14px 0 18px;
+    }
+
+    .mobileTop {
+      width: min(92vw, var(--rail));
+      margin-inline: auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding-bottom: 10px;
+    }
+
+    .mobileInner {
+      width: min(92vw, var(--rail));
+      margin-inline: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .mLink {
+      display: block;
+      padding: 12px 12px;
+      border-radius: 14px;
+      font-weight: 900;
+      color: var(--muted);
+      border: 1px solid transparent;
+    }
+
+    .mLink:hover {
+      color: var(--text);
+      background: color-mix(in srgb, var(--surface) 70%, transparent);
+      border-color: color-mix(in srgb, var(--border) 70%, transparent);
+    }
+
+    .mobileRowBtns {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    @media (max-width: 480px) {
+      .mobileRowBtns {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* =========================
+      TYPOGRAPHY + SECTIONS (unchanged)
+    ========================= */
+    section {
+      padding: 90px 0;
+    }
+
+    @media (max-width: 768px) {
+      section {
+        padding: 72px 0;
+      }
+    }
+
+    .kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      font-weight: 950;
+      font-size: 12px;
+      color: var(--subtle);
+    }
+
+    .kicker::before {
+      content: "";
+      width: 26px;
+      height: 2px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--p), var(--p2));
+    }
+
+    .h1 {
+      margin: 14px 0 0;
+      font-size: clamp(38px, 5vw, 64px);
+      line-height: 1.05;
+      letter-spacing: -.03em;
+      font-weight: 980;
+    }
+
+    .h2 {
+      margin: 12px 0 0;
+      font-size: clamp(26px, 3.6vw, 44px);
+      line-height: 1.12;
+      letter-spacing: -.02em;
+      font-weight: 980;
+    }
+
+    .lead {
+      margin: 14px 0 0;
+      max-width: 72ch;
+      font-size: 16px;
+      color: var(--muted);
+    }
+
+    .grad {
+      background: linear-gradient(135deg, var(--p), var(--p2));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .hero {
+      padding: 76px 0 54px;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.15fr .85fr;
+      gap: 34px;
+      align-items: start;
+    }
+
+    @media (max-width: 940px) {
+      .hero-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .chip {
+      padding: 7px 11px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: color-mix(in srgb, var(--surface) 60%, transparent);
+      color: var(--muted);
+      font-weight: 900;
+      font-size: 12.5px;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      padding: 18px;
+      border-radius: var(--r2);
+      border: 1px solid var(--border);
+      background: color-mix(in srgb, var(--surface) 60%, transparent);
+      box-shadow: var(--shadow2);
+    }
+
+    .stat {
+      padding: 14px 14px;
+      border-radius: var(--r1);
+      border: 1px solid color-mix(in srgb, var(--border) 80%, transparent);
+      background: color-mix(in srgb, var(--bg) 70%, transparent);
+      transition: transform .15s ease, border-color .15s ease;
+    }
+
+    .stat:hover {
+      transform: translateY(-2px);
+      border-color: color-mix(in srgb, var(--p) 28%, var(--border));
+    }
+
+    .stat .big {
+      font-weight: 980;
+      font-size: 20px;
+      letter-spacing: -.02em;
+    }
+
+    .stat .lbl {
+      margin-top: 4px;
+      font-weight: 950;
+      font-size: 12.5px;
+      color: var(--subtle);
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+
+    .stat .desc {
+      margin-top: 8px;
+      font-size: 12.8px;
+      color: var(--muted);
+    }
+
+    .band {
+      background: linear-gradient(180deg, transparent,
+          color-mix(in srgb, var(--bg2) 60%, transparent), transparent);
+      border-block: 1px solid color-mix(in srgb, var(--border) 65%, transparent);
+    }
+
+    .grid2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+    }
+
+    .grid3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+
+    @media (max-width: 980px) {
+
+      .grid2,
+      .grid3 {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .panel,
+    .role,
+    .project,
+    .contact-card {
+      border: 1px solid var(--border);
+      border-radius: var(--r2);
+      background: color-mix(in srgb, var(--surface) 55%, transparent);
+      box-shadow: var(--shadow2);
+      padding: 20px;
+    }
+
+    .panel h3,
+    .role-title,
+    .project h3 {
+      margin: 0;
+      font-size: 18px;
+      font-weight: 980;
+      letter-spacing: -.01em;
+    }
+
+    .panel p,
+    .project p {
+      margin: 12px 0 0;
+      color: var(--muted);
+      font-size: 14.8px;
+    }
+
+    .list {
+      margin: 12px 0 0;
+      padding-left: 18px;
+      color: var(--muted);
+      font-size: 14.6px;
+    }
+
+    .list li {
+      margin: 7px 0;
+    }
+
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .tag {
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 950;
+      border: 1px solid color-mix(in srgb, var(--p) 26%, var(--border));
+      background: color-mix(in srgb, var(--p) 12%, transparent);
+      color: color-mix(in srgb, var(--p2) 85%, var(--text));
+    }
+
+    .timeline {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .role-top {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: baseline;
+      justify-content: space-between;
+    }
+
+    .role-date {
+      font-weight: 950;
+      font-size: 12.5px;
+      letter-spacing: .10em;
+      text-transform: uppercase;
+      color: var(--subtle);
+    }
+
+    .store-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 14px;
+      align-items: center;
+    }
+
+    .store {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      background: color-mix(in srgb, var(--bg) 70%, transparent);
+      font-weight: 950;
+      cursor: pointer;
+      transition: transform .15s ease, border-color .15s ease;
+    }
+
+    .store:hover {
+      transform: translateY(-1px);
+      border-color: color-mix(in srgb, var(--p) 35%, var(--border));
+    }
+
+    .store small {
+      display: block;
+      font-weight: 900;
+      color: var(--subtle);
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      font-size: 10px;
+      line-height: 1.1;
+    }
+
+    .store span {
+      display: block;
+      font-size: 13px;
+      line-height: 1.15;
+    }
+
+    .store[aria-disabled="true"] {
+      opacity: .45;
+      pointer-events: none;
+    }
+
+    .logo {
+      width: 28px;
+      height: 28px;
+      border-radius: 10px;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+    }
+
+    .logo img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+    }
+
+    .contact-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 14px;
+      margin-top: 18px;
+    }
+
+    @media (max-width: 980px) {
+      .contact-row {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .contact-card {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .contact-card .left .k {
+      font-weight: 980;
+      font-size: 12px;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--subtle);
+    }
+
+    .contact-card .left .v {
+      margin-top: 6px;
+      font-weight: 980;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    footer {
+      padding: 28px 0 40px;
+      border-top: 1px solid var(--border);
+      color: var(--subtle);
+      font-size: 13px;
+    }
+
+    .foot {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .foot a {
+      font-weight: 950;
+      color: var(--muted);
+    }
+
+    .foot a:hover {
+      color: var(--text);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        transition: none !important;
+        scroll-behavior: auto !important;
+      }
+    }
+
+    @media (max-width: 900px) {
+
+      #cvBtnDesktop,
+      #themeBtnDesktop {
+        display: none !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- NAV -->
+  <header>
+    <div class="rail nav">
+      <a class="brand" href="#home" aria-label="Go to top">
+        <span>Abhishek Khatiwada</span>
+      </a>
+
+      <nav class="links" aria-label="Primary navigation">
+        <a href="#about">About</a>
+        <a href="#skills">Skills</a>
+        <a href="#experience">Experience</a>
+        <a href="#education">Education</a>
+        <a href="#contact">Contact</a>
+      </nav>
+
+      <div class="actions">
+        <a class="btn" href="#projects">Projects</a>
+        <a id="cvBtnDesktop" class="btn btn-primary" href="abhishek_khatiwada_cv.pdf" download>Download CV</a>
+
+        <button id="themeBtnDesktop" class="btn" aria-label="Toggle theme">
+          <span id="themeLabel">Dark</span> <span aria-hidden="true">↔</span> <strong id="themeMode">Light</strong>
+        </button>
+
+        <!-- SVG hamburger to ensure visible in dark mode -->
+        <button class="icon hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M4 7h16M4 12h16M4 17h16" stroke-width="2" stroke-linecap="round" />
+          </svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- FULL-WIDTH MOBILE MENU OVERLAY -->
+  <div class="mobileOverlay" id="mobileOverlay" aria-hidden="true">
+    <div class="mobilePanel" role="dialog" aria-modal="true" aria-label="Mobile menu">
+      <div class="mobileTop">
+        <a class="brand" href="#home" aria-label="Go to top">
+          <span>Abhishek Khatiwada</span>
+        </a>
+
+        <!-- close button -->
+        <button class="icon" id="closeMobile" aria-label="Close menu">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M6 6l12 12M18 6L6 18" stroke-width="2" stroke-linecap="round" />
+          </svg>
+        </button>
+      </div>
+
+      <!-- IMPORTANT: full width, but content padded nicely -->
+      <div class="mobileInner">
+        <!-- ✅ NAV ITEMS INSIDE MOBILE MENU -->
+        <a class="mLink" href="#about">About</a>
+        <a class="mLink" href="#skills">Skills</a>
+        <a class="mLink" href="#experience">Experience</a>
+        <a class="mLink" href="#education">Education</a>
+        <a class="mLink" href="#contact">Contact</a>
+
+        <div class="mobileRowBtns">
+          <a class="btn btn-primary" href="abhishek_khatiwada_cv.pdf" download>Download CV</a>
+
+          <button class="btn" id="themeToggleMobile" aria-label="Toggle theme (mobile)">
+            <span id="themeLabelM">Dark</span> <span aria-hidden="true">↔</span>
+            <strong id="themeModeM">Light</strong>
+          </button>
+        </div>
+
+        <a class="mLink" href="https://www.linkedin.com/in/abhishek-khatiwada-427a36226/" target="_blank"
+          rel="noopener">
+          LinkedIn
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- HERO -->
+  <main id="home" class="hero">
+    <div class="rail hero-grid">
+      <div>
+        <div class="kicker">Flutter Developer</div>
+        <h1 class="h1">Cross-platform apps with <span class="grad">real-time</span> features</h1>
+        <p class="lead">
+          Flutter Developer with 3+ years of professional experience building production-grade cross-platform mobile
+          applications across fintech, logistics, VoIP, retail, and government systems. Strong expertise in Flutter
+          architecture (BLoC/Cubit/Clean Architecture), real-time systems (WebSocket, GraphQL), and map-based &
+          payment-driven applications.
+        </p>
+
+        <div class="chips" aria-label="Quick facts">
+          <span class="chip">iOS & Android</span>
+          <span class="chip">BLoC • Cubit</span>
+          <span class="chip">Clean Architecture</span>
+          <span class="chip">WebSocket</span>
+          <span class="chip">GraphQL</span>
+          <span class="chip">Google Maps</span>
+          <span class="chip">Stripe</span>
+          <span class="chip">Firebase</span>
+        </div>
+
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="#projects">View Projects</a>
+          <a class="btn" href="#experience">Work Experience</a>
+          <a class="btn" href="https://www.linkedin.com/in/abhishek-khatiwada-427a36226/" target="_blank"
+            rel="noopener">LinkedIn</a>
+        </div>
+      </div>
+
+      <aside class="stats" aria-label="Highlights">
+        <div class="stat">
+          <div class="big">3+ Years</div>
+          <div class="lbl">Experience</div>
+          <div class="desc">Production-grade Flutter delivery</div>
+        </div>
+        <div class="stat">
+          <div class="big">5 Domains</div>
+          <div class="lbl">Industries</div>
+          <div class="desc">Fintech • Logistics • VoIP • Retail • Govt</div>
+        </div>
+        <div class="stat">
+          <div class="big">Real-time</div>
+          <div class="lbl">Systems</div>
+          <div class="desc">WebSocket messaging + GraphQL sync</div>
+        </div>
+        <div class="stat">
+          <div class="big">Maps + Pay</div>
+          <div class="lbl">Integrations</div>
+          <div class="desc">Google Maps SDK + Stripe</div>
+        </div>
+      </aside>
+    </div>
+  </main>
+
+  <!-- ABOUT -->
+  <section id="about" class="band">
+    <div class="rail">
+      <div class="kicker">About</div>
+      <h2 class="h2">Who I <span class="grad">Am</span></h2>
+      <p class="lead">
+        I build scalable Flutter apps with clean architecture, real-time experiences, and map/payment-driven
+        workflows —
+        focusing on performance, stability, and maintainable code.
+      </p>
+
+      <div class="grid2" style="margin-top:18px;">
+        <div class="panel">
+          <h3>Profile</h3>
+          <p>
+            Strong expertise in Flutter architecture (BLoC/Cubit/Clean Architecture) and real-time systems
+            (WebSocket, GraphQL).
+            Experienced in Firebase (Auth, Realtime, Cloud Messaging), local storage (Shared Preference,
+            Hive), Google
+            Maps SDK (routing, markers, polylines),
+            Stripe payments integration, and iOS/Android deployment.
+          </p>
+          <div class="tags" aria-label="Core stack">
+            <span class="tag">Flutter</span>
+            <span class="tag">Dart</span>
+            <span class="tag">BLoC</span>
+            <span class="tag">Cubit</span>
+            <span class="tag">Clean Architecture</span>
+            <span class="tag">WebSocket</span>
+            <span class="tag">GraphQL</span>
+            <span class="tag">Firebase</span>
+            <span class="tag">Google Maps</span>
+            <span class="tag">Stripe</span>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h3>What I Deliver</h3>
+          <ul class="list">
+            <li>Scalable architecture using Clean Architecture + Repository Pattern</li>
+            <li>Real-time messaging and data synchronization</li>
+            <li>Map-based UX: routing, polylines, markers, and tracking</li>
+            <li>Payment-driven flows with Stripe</li>
+            <li>Performance optimization and stability improvements</li>
+            <li>Reliable App Store and Play Store deployments</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SKILLS -->
+  <section id="skills">
+    <div class="rail">
+      <div class="kicker">Skills</div>
+      <h2 class="h2">Technical <span class="grad">Skills</span></h2>
+      <p class="lead">Core capabilities grouped for quick scanning.</p>
+
+      <div class="grid3" style="margin-top:18px;">
+        <div class="panel">
+          <h3>Flutter & Mobile Development</h3>
+          <ul class="list">
+            <li>Flutter, Dart</li>
+            <li>State Management: BLoC, Cubit, Riverpod</li>
+            <li>Clean Architecture, Repository Pattern</li>
+            <li>Custom UI Development, Responsive Design</li>
+            <li>Performance Optimization & App Stability</li>
+          </ul>
+        </div>
+
+        <div class="panel">
+          <h3>Backend & Real-Time Systems</h3>
+          <ul class="list">
+            <li>RESTful APIs, GraphQL</li>
+            <li>WebSocket</li>
+            <li>Firebase (Auth, Realtime, Cloud Messaging)</li>
+            <li>Local Storage: Shared Preference, Hive</li>
+          </ul>
+        </div>
+
+        <div class="panel">
+          <h3>Maps, Payments & Tools</h3>
+          <ul class="list">
+            <li>Google Maps SDK (Routing, Markers, Polylines)</li>
+            <li>Stripe Payments Integration</li>
+            <li>iOS & Android App Deployment</li>
+            <li>Git, GitHub, Jira, Slack, Figma, Adobe XD</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EXPERIENCE -->
+  <section id="experience" class="band">
+    <div class="rail">
+      <div class="kicker">Experience</div>
+      <h2 class="h2">Work <span class="grad">Experience</span></h2>
+      <p class="lead">Roles and contributions based on production work.</p>
+
+      <div class="timeline" style="margin-top:18px;">
+        <article class="role">
+          <div class="role-top">
+            <h3 class="role-title">Varosa Technology — Mid-level Flutter Developer</h3>
+            <div class="role-date">June 2025 – Present</div>
+          </div>
+          <ul class="list">
+            <li>Developed and maintained Calilio, implementing real-time calling and messaging using BLoC
+              and GraphQL.</li>
+            <li>Contributed to Shram Sansar, implementing WebSocket-based real-time messaging and multiple
+              citizen-facing modules.</li>
+            <li>Enhanced Fishking, implementing role-based access control, delivery routing, and
+              admin/client workflows.</li>
+          </ul>
+        </article>
+
+        <article class="role">
+          <div class="role-top">
+            <h3 class="role-title">Advik AI — Mid-level Flutter Developer</h3>
+            <div class="role-date">July 2024 – June 2025</div>
+          </div>
+          <ul class="list">
+            <li>Delivered SuperTruck logistics & fleet management platform using Cubit and Repository
+              Pattern.</li>
+            <li>Integrated Google Maps, Firebase, and WebSocket for real-time truck tracking, trip
+              monitoring, and load updates.</li>
+            <li>Implemented REST APIs for load booking, scheduling, analytics, and AI-assisted routing
+              features.</li>
+            <li>Contributed across feature development, testing, optimization, and deployment to Play Store
+              and App Store.</li>
+          </ul>
+        </article>
+
+        <article class="role">
+          <div class="role-top">
+            <h3 class="role-title">Paywell Nepal — Junior Flutter Developer</h3>
+            <div class="role-date">April 2023 – June 2024</div>
+          </div>
+          <ul class="list">
+            <li>Enhanced Paywell Wallet with UI improvements, bug fixes, and new payment/transaction
+              features using Cubit.</li>
+            <li>Developed Paywell Agent App from scratch supporting bank transfers, wallet top-ups, and
+              remittance workflows via REST APIs.</li>
+            <li>Delivered Samsara Remit, a white-labeled remittance app extending core modules for
+              multi-brand deployment.</li>
+          </ul>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROJECTS (store links) -->
+  <section id="projects">
+    <div class="rail">
+      <div class="kicker">Projects</div>
+      <h2 class="h2">Key <span class="grad">Projects</span></h2>
+      <p class="lead">
+        These are the projects that i have completed and are in live.
+      </p>
+
+      <div class="grid2" style="margin-top:18px;">
+        <!-- Shram Sansar -->
+        <article class="project">
+          <h3>Shram Sansar — Government Job Portal App</h3>
+          <p>
+            Implemented modules including notifications, emergency help, feedback, job listings, and
+            provider resources.
+            Integrated WebSocket for real-time messaging and REST APIs for other services.
+          </p>
+          <div class="tags">
+            <span class="tag">Flutter</span><span class="tag">Cubit</span><span class="tag">WebSocket</span><span
+              class="tag">REST APIs</span>
+          </div>
+          <div class="store-row">
+            <a class="store"
+              data-href="https://apps.apple.com/np/app/shramsansar-%E0%A4%B6-%E0%A4%B0%E0%A4%AE-%E0%A4%B8-%E0%A4%B8-%E0%A4%B0/id6747959692"
+              target="_blank" rel="noopener">
+              <span class="logo"><img src="./appstore.png" height="20px" width="20px" alt=""></span>
+              <div><small>Available on</small><span>App Store</span></div>
+            </a>
+            <a class="store" data-href="https://play.google.com/store/apps/details?id=np.gov.shramsansar"
+              target="_blank" rel="noopener">
+              <span class="logo"><img src="./playstore.png" height="20px" width="20px" alt=""></span>
+              <div><small>Available on</small><span>Google Play</span></div>
+            </a>
+          </div>
+        </article>
+
+        <!-- SuperTruck -->
+        <article class="project">
+          <h3>SuperTruck — Logistics & Transport App</h3>
+          <p>
+            Built a production-ready logistics app with real-time fleet tracking, route visualization, and
+            trip monitoring.
+            Integrated Google Maps SDK, WebSocket, Firebase, and Stripe. Designed a dynamic parking module
+            for real-time booking and payments.
+          </p>
+          <div class="tags">
+            <span class="tag">Google Maps</span><span class="tag">Firebase</span><span class="tag">WebSocket</span><span
+              class="tag">Stripe</span>
+          </div>
+          <div class="store-row">
+            <a class="store" data-href="https://apps.apple.com/np/app/super-truck-app/id6738981349" target="_blank"
+              rel="noopener">
+              <span class="logo"><img src="./appstore.png" height="20px" width="20px" alt=""></span>
+              <div><small>Available on</small><span>App Store</span></div>
+            </a>
+            <a class="store" data-href="#" target="_blank" rel="noopener">
+              <span class="logo"><img src="./playstore.png" height="20px" width="20px" alt=""></span>
+              <div><small>Not listed</small><span>Google Play</span></div>
+            </a>
+          </div>
+        </article>
+
+        <!-- Calilio -->
+        <article class="project">
+          <h3>Calilio — VoIP Communication Platform</h3>
+          <p>
+            Maintained and enhanced a cross-platform VoIP and messaging app. Improved call reliability and
+            messaging experience
+            through UI and performance optimizations. Integrated GraphQL backend for real-time data
+            synchronization.
+          </p>
+          <div class="tags">
+            <span class="tag">Flutter</span><span class="tag">BLoC</span><span class="tag">GraphQL</span><span
+              class="tag">Real-time</span>
+          </div>
+          <div class="store-row">
+            <a class="store" data-href="https://apps.apple.com/np/app/calilio-second-phone-number/id6450351787"
+              target="_blank" rel="noopener">
+              <span class="logo"><img src="./appstore.png" height="20px" width="20px" alt=""></span>
+              <div><small>Available on</small><span>App Store</span></div>
+            </a>
+            <a class="store" data-href="https://play.google.com/store/search?q=calilio&c=apps" target="_blank"
+              rel="noopener">
+              <span class="logo"><img src="./playstore.png" alt=""></span>
+              <div><small>Available on</small><span>Google Play</span></div>
+            </a>
+          </div>
+        </article>
+
+        <!-- Fishking -->
+        <article class="project">
+          <h3>Fishking — Retail Management System (Belgium)</h3>
+          <p>
+            Developed client and admin Flutter applications for order management, inventory control, and
+            delivery tracking.
+            Implemented multi-role access control with Cubit and secure UI workflows. Improved stability and
+            optimized API integrations.
+          </p>
+          <div class="tags">
+            <span class="tag">Multi-role</span><span class="tag">Cubit</span><span class="tag">Secure
+              UI</span><span class="tag">Optimization</span>
+          </div>
+          <div class="store-row">
+            <a class="store" data-href="#" target="_blank" rel="noopener">
+              <span class="logo"><img src="./appstore.png" alt=""></span>
+              <div><small>Belgium</small><span>App Store</span></div>
+            </a>
+            <a class="store" data-href="#" target="_blank" rel="noopener">
+              <span class="logo"><img src="./playstore.png" alt=""></span>
+              <div><small>Belgium</small><span>Google Play</span></div>
+            </a>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- EDUCATION -->
+  <section id="education" class="band">
+    <div class="rail">
+      <div class="kicker">Education</div>
+      <h2 class="h2">Academic <span class="grad">Background</span></h2>
+      <p class="lead">Education details.</p>
+
+      <div class="grid2" style="margin-top:18px;">
+        <div class="panel">
+          <h3>Master’s in Computer Science</h3>
+          <p>Texas College of Management and IT<br><strong>2024 – Present</strong></p>
+        </div>
+        <div class="panel">
+          <h3>Bachelor’s in Information Technology</h3>
+          <p>Texas College of Management and IT<br><strong>2019 – 2023</strong></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT (no form) -->
+  <section id="contact">
+    <div class="rail">
+      <div class="kicker">Contact</div>
+      <h2 class="h2">Get in <span class="grad">Touch</span></h2>
+      <p class="lead">Fast ways to reach me for opportunities and collaborations.</p>
+
+      <div class="contact-row">
+        <div class="contact-card">
+          <div class="left">
+            <div class="k">Phone</div>
+            <div class="v">+977 9745975982</div>
+          </div>
+          <a class="btn" href="tel:+9779745975982">Call</a>
+        </div>
+
+        <div class="contact-card">
+          <div class="left">
+            <div class="k">Email</div>
+            <div class="v">abhishekkhatiwada001@gmail.com</div>
+          </div>
+          <a class="btn" href="mailto:abhishekkhatiwada001@gmail.com">Email</a>
+        </div>
+
+        <div class="contact-card">
+          <div class="left">
+            <div class="k">LinkedIn</div>
+            <div class="v">Open profile</div>
+          </div>
+          <a class="btn" href="https://www.linkedin.com/in/abhishek-khatiwada-427a36226/" target="_blank"
+            rel="noopener">Open</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="rail foot">
+      <div>© <span id="year"></span> Abhishek Khatiwada. All rights reserved.</div>
+      <div style="display:flex; gap:14px;">
+        <a href="#home">Top</a>
+        <a href="#projects">Projects</a>
+        <a href="abhishek_khatiwada_cv.pdf" download>CV</a>
+      </div>
+    </div>
+  </footer>
+  <script>
+    // --- Theme toggle: desktop + mobile (keep your existing applyTheme if you already have it) ---
+    const root = document.documentElement;
+
+    const themeBtn = document.getElementById("themeBtnDesktop"); // desktop
+    const themeMode = document.getElementById("themeMode");
+    const themeLabel = document.getElementById("themeLabel");
+
+    const themeBtnM = document.getElementById("themeToggleMobile"); // mobile
+    const themeModeM = document.getElementById("themeModeM");
+    const themeLabelM = document.getElementById("themeLabelM");
+
+    function syncThemeLabels(theme) {
+      if (!themeModeM || !themeLabelM) return;
+      if (theme === "dark") {
+        themeLabel.textContent = "Light";
+        themeMode.textContent = "Dark";
+        themeLabelM.textContent = "Light";
+        themeModeM.textContent = "Dark";
+      } else {
+        themeLabel.textContent = "Dark";
+        themeMode.textContent = "Light";
+        themeLabelM.textContent = "Dark";
+        themeModeM.textContent = "Light";
+      }
+    }
+
+    function applyTheme(theme) {
+      root.setAttribute("data-theme", theme);
+      localStorage.setItem("theme", theme);
+      syncThemeLabels(theme);
+    }
+
+    const saved = localStorage.getItem("theme");
+    if (saved) applyTheme(saved);
+    else {
+      const prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+      applyTheme(prefersDark ? "dark" : "light");
+    }
+
+    themeBtn?.addEventListener("click", () => {
+      const current = root.getAttribute("data-theme") || "light";
+      applyTheme(current === "dark" ? "light" : "dark");
+    });
+
+    themeBtnM?.addEventListener("click", () => {
+      const current = root.getAttribute("data-theme") || "light";
+      applyTheme(current === "dark" ? "light" : "dark");
+    });
+
+    // --- Mobile menu open/close ---
+    const hamburger = document.getElementById("hamburger");
+    const overlay = document.getElementById("mobileOverlay");
+    const closeBtn = document.getElementById("closeMobile");
+
+    function isMobile() { return window.matchMedia("(max-width: 900px)").matches; }
+
+    function openMenu() {
+      overlay.style.display = "block";
+      overlay.setAttribute("aria-hidden", "false");
+      hamburger?.setAttribute("aria-expanded", "true");
+      document.body.style.overflow = "hidden";
+    }
+
+    function closeMenu() {
+      overlay.style.display = "none";
+      overlay.setAttribute("aria-hidden", "true");
+      hamburger?.setAttribute("aria-expanded", "false");
+      document.body.style.overflow = "";
+    }
+
+    function syncHamburger() {
+      if (!hamburger) return;
+      hamburger.style.display = isMobile() ? "inline-flex" : "none";
+      if (!isMobile()) closeMenu();
+    }
+
+    syncHamburger();
+    window.addEventListener("resize", syncHamburger);
+
+    hamburger?.addEventListener("click", () => {
+      const open = overlay.style.display === "block";
+      open ? closeMenu() : openMenu();
+    });
+
+    closeBtn?.addEventListener("click", closeMenu);
+
+    // click outside panel closes
+    overlay?.addEventListener("click", (e) => {
+      if (e.target === overlay) closeMenu();
+    });
+
+    // click a menu item closes
+    overlay?.querySelectorAll("a.mLink, .mobileRowBtns a").forEach(a => {
+      a.addEventListener("click", () => closeMenu());
+    });
+
+    document.querySelectorAll(".store").forEach(el => {
+      const href = el.getAttribute("data-href") || "#";
+      if (!href || href === "#") {
+        el.setAttribute("aria-disabled", "true");
+        el.setAttribute("href", "javascript:void(0)");
+      } else {
+        el.setAttribute("aria-disabled", "false");
+        el.setAttribute("href", href);
+      }
+    });
+  </script>
+</body>
+
+</html>
